@@ -1,0 +1,45 @@
+<div id="page-profile" class="page" style="padding: 20px;">
+    <div class="balance-card" style="margin-bottom: 20px;">
+        <h3>Мой профиль</h3>
+        <p>Ваш ID: <span id="userIdDisplay">0</span></p>
+    </div>
+
+    <div style="background:#1c1c1e; padding:15px; border-radius:15px;">
+        <input type="text" id="promoInput" placeholder="Введите промокод" 
+               style="width:80%; padding:10px; background:#2c2c2e; border:none; color:white; border-radius:10px; margin-bottom:10px;">
+        <button onclick="activatePromo()" style="width:85%; background:#34c759; border:none; color:white; padding:10px; border-radius:10px; font-weight:bold;">АКТИВИРОВАТЬ</button>
+    </div>
+
+    <div id="adminButtonArea" style="display:none; margin-top:20px;">
+        <button onclick="openAdmin()" style="width:100%; background:gold; color:black; border:none; padding:15px; border-radius:15px; font-weight:bold;">🛠 АДМИН-ПАНЕЛЬ</button>
+    </div>
+</div>
+
+<script>
+    // В JS скрипте добавь это:
+    const MY_ID = 7897663884;
+    let user_id = tg.initDataUnsafe?.user?.id || 0;
+    document.getElementById('userIdDisplay').innerText = user_id;
+
+    // Показываем админку только владельцу
+    if(user_id === MY_ID) {
+        document.getElementById('adminButtonArea').style.display = 'block';
+    }
+
+    function openAdmin() {
+        tg.HapticFeedback.notificationOccurred('success');
+        tg.sendData("open_admin"); // Бот получит сигнал, если нужно
+        // Или просто выводим алерт, так как админка в боте
+        tg.showAlert("Бро, админка работает в самом боте! Напиши /admin прямо в чат с ботом.");
+    }
+
+    function activatePromo() {
+        let code = document.getElementById('promoInput').value;
+        if(!code) return tg.showAlert("Введите код!");
+        tg.showConfirm("Активировать промокод " + code + "?", (res) => {
+            if(res) {
+                tg.showAlert("Код отправлен на проверку! (В реальной версии тут идет запрос к БД)");
+            }
+        });
+    }
+</script>
